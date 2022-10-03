@@ -65,6 +65,8 @@ public class ViewJPanel extends javax.swing.JPanel {
         lblName = new javax.swing.JLabel();
         lblId = new javax.swing.JLabel();
         lblAge = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -134,6 +136,20 @@ public class ViewJPanel extends javax.swing.JPanel {
 
         lblAge.setText("Age:");
 
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -187,7 +203,11 @@ public class ViewJPanel extends javax.swing.JPanel {
                                 .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(300, 300, 300)
-                        .addComponent(btnView)))
+                        .addComponent(btnView)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnUpdate)))
                 .addContainerGap(232, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -200,7 +220,10 @@ public class ViewJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(btnView)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnView)
+                            .addComponent(btnDelete)
+                            .addComponent(btnUpdate))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblName)
@@ -297,8 +320,93 @@ public class ViewJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int selectedRowIndex = tblEmployee.getSelectedRow();
+
+        if(selectedRowIndex<0){
+
+            JOptionPane.showMessageDialog(this,"Please select the row to delete");
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tblEmployee.getModel();
+        Employee selectedEmployee = (Employee) model.getValueAt(selectedRowIndex, 0);
+
+        directory.deleteEmployee(selectedEmployee);
+
+        JOptionPane.showMessageDialog(this,"Employee record deleted.");
+
+        populateTable();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+
+        DefaultTableModel model = (DefaultTableModel) tblEmployee.getModel();
+        if(tblEmployee.getSelectedRowCount() == 1){
+          //if Single row is selcted then update
+            int rowindex = tblEmployee.getSelectedRow();
+        
+            String name = txtName.getText();
+            String id = txtId.getText();
+            String age = txtAge.getText();
+            String gender = txtGender.getText();
+            String startDate = txtStartDate.getText();
+            String level = txtLevel.getText();
+            String teamInfo = txtTeamInfo.getText();
+            String title = txtTitle.getText();
+            String contNum = txtContPhone.getText();
+            String contEmail = txtContEmail.getText();
+
+
+            Employee em = directory.updateEmployee(rowindex);
+        
+
+        
+            em.setName(name);
+            em.setId(id);
+            em.setAge(age);
+            em.setGender(gender);
+            em.setStartDate(startDate);
+            em.setLevel(level);
+            em.setTeamInfo(teamInfo);
+            em.setTitle(title);
+            em.setContNum(contNum);
+            em.setContEmail(contEmail);
+
+            //set updated value on table row
+            model.setValueAt(name, tblEmployee.getSelectedRow(), 0);
+            model.setValueAt(id, tblEmployee.getSelectedRow(), 1);
+            model.setValueAt(age, tblEmployee.getSelectedRow(), 2);
+            model.setValueAt(gender, tblEmployee.getSelectedRow(), 3);
+            model.setValueAt(startDate, tblEmployee.getSelectedRow(), 4);
+            model.setValueAt(level, tblEmployee.getSelectedRow(), 5);
+            model.setValueAt(teamInfo, tblEmployee.getSelectedRow(), 6);
+            model.setValueAt(title, tblEmployee.getSelectedRow(), 7);
+            model.setValueAt(contNum, tblEmployee.getSelectedRow(), 8);
+            model.setValueAt(contEmail, tblEmployee.getSelectedRow(), 9);
+
+            //update message display
+        
+            JOptionPane.showMessageDialog(this, "Employee record updated successfully!");
+        
+            }else {
+                if(tblEmployee.getSelectedRowCount() == 0) {
+                    //if table is empty
+                    JOptionPane.showMessageDialog(this, "Employee table is empty!");
+                }else{
+                    //if row is not selected or multiple row selected for update
+                    JOptionPane.showMessageDialog(this, "Please select single row for update.");
+                }
+            }
+
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnView;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
